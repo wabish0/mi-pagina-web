@@ -1,4 +1,5 @@
-name: Despliegue a Surge.sh
+
+name: Publicar Pagina a Surge.sh
 
 on:
   push:
@@ -8,11 +9,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Instalar Surge.sh
-        run: npm install -g surge
-      - name: Desplegar a Surge.sh
-        run: surge --project . --domain <dominio de Surge.sh>
-        env:
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+      - name: Clona el repositorio
+        uses: actions/checkout@v3
+
+      - name: configura nodejs  
+        uses: actions/setup-node@v3
+        with:
+            node-version: '22' 
+
+      - name: Instala Surge       
+        run: npm install --global surge
+
+      - name: Publicar pagina
+        run: surge --project ./ --domain ${{ secrets.Francis_DM }} --token ${{ secrets.SURGE_API_KEY }}
