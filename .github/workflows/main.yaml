@@ -1,5 +1,4 @@
-
-name: Publicar Pagina a Surge.sh
+name: Deploy to Surge
 
 on:
   push:
@@ -11,16 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clona el repositorio
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: configura nodejs  
-        uses: actions/setup-node@v3
-        with:
-            node-version: '22' 
+    - name: Build and Deploy
+      run: |
+        # Configurar Surge.sh
+        npm install --global surge
+        echo "${{ secrets.SURGE_TOKEN }}" | surge login # Reemplazar <SURGE_API_KEY> con la API Key de Surge de cada estudiante
 
-      - name: Instala Surge       
-        run: npm install --global surge
-
-      - name: Publicar pagina
-        run: surge --project ./ --domain ${{ secrets.Francis_DM }} --token ${{ secrets.SURGE_API_KEY }}
+        # Desplegar en Surge.sh
+        surge --project ./ --domain \FrancisDM.surge.sh # Reemplazar <SURGE_SUBDOMAIN> con un subdominio único para cada estudiante
